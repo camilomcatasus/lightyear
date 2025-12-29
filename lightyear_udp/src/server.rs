@@ -233,6 +233,8 @@ impl ServerUdpPlugin {
                             };
                         }
                         Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock => break,
+                        #[cfg(windows)]
+                        Err(ref e) if e.kind() == std::io::ErrorKind::ConnectionReset => continue,
                         Err(e) => {
                             error!("Error receiving UDP packet: {}", e);
                             break;
